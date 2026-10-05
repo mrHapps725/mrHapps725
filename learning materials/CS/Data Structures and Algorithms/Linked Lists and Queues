@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linked Lists and Queues</title>
+<style>
+  :root{
+    --bg:#f4f7fb; --card:#fff; --ink:#172033; --muted:#5d687b;
+    --primary:#315efb; --primary-dark:#2346c7; --border:#dce3ef;
+    --success:#18794e; --success-bg:#eaf8f1; --danger:#b42318; --danger-bg:#fff0ee;
+    --accent:#eef3ff; --code:#172033;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    line-height:1.65;
+  }
+  .topbar{
+    position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{max-width:980px;margin:auto;padding:12px 20px;display:flex;gap:16px;align-items:center}
+  .title-small{font-weight:800;white-space:nowrap}
+  .progress-wrap{flex:1;height:9px;background:#e7ebf3;border-radius:99px;overflow:hidden}
+  .progress{height:100%;width:0;background:var(--primary);transition:width .3s}
+  .progress-text{font-size:.85rem;color:var(--muted);white-space:nowrap}
+  main{max-width:900px;margin:0 auto;padding:42px 20px 80px}
+  header.hero{
+    background:linear-gradient(135deg,#18264a,#315efb);
+    color:white;border-radius:22px;padding:42px;margin-bottom:28px;
+    box-shadow:0 12px 35px rgba(35,70,199,.18)
+  }
+  h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;margin:0 0 10px}
+  h2{margin-top:42px;font-size:1.65rem}
+  h3{font-size:1.2rem;margin-top:28px}
+  p{margin:14px 0}
+  .muted{color:var(--muted)}
+  .section{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;margin:22px 0;box-shadow:0 4px 14px rgba(20,35,65,.04)}
+  .video-placeholder{
+    border-radius:15px;background:#111a2d;color:white;padding:28px;text-align:center;margin:20px 0
+  }
+  .cyu{
+    border:2px solid #d9e2ff;background:#fbfcff;border-radius:17px;padding:22px;margin:25px 0
+  }
+  .cyu-label{
+    display:inline-block;background:var(--primary);color:white;font-weight:800;
+    font-size:.78rem;letter-spacing:.08em;border-radius:999px;padding:4px 10px;margin-bottom:10px
+  }
+  .question{font-weight:700;font-size:1.05rem;margin:5px 0 14px}
+  .options{display:grid;gap:9px;margin:12px 0 16px}
+  .option{
+    display:flex;align-items:flex-start;gap:10px;padding:11px 13px;border:1px solid var(--border);
+    border-radius:10px;background:white;cursor:pointer;transition:.15s
+  }
+  .option:hover{border-color:#aebeff;background:#f8faff}
+  .option input{margin-top:5px;accent-color:var(--primary)}
+  button{
+    border:0;border-radius:9px;padding:10px 16px;font-weight:700;cursor:pointer;
+    background:var(--primary);color:white;font-size:.95rem
+  }
+  button:hover{background:var(--primary-dark)}
+  button.secondary{background:#e9edf5;color:var(--ink)}
+  .feedback{display:none;margin-top:15px;padding:14px 16px;border-radius:11px}
+  .feedback.show{display:block}
+  .feedback.correct{background:var(--success-bg);color:var(--success);border:1px solid #b8e6cf}
+  .feedback.incorrect{background:var(--danger-bg);color:var(--danger);border:1px solid #f0c4bf}
+  .feedback .why{margin-top:6px;color:inherit}
+  textarea{
+    width:100%;min-height:110px;border:1px solid var(--border);border-radius:10px;
+    padding:12px;font:inherit;resize:vertical;background:white;margin-bottom:10px
+  }
+  .answer{display:none;margin-top:14px;padding:14px 16px;background:#f0f4ff;border-left:4px solid var(--primary);border-radius:8px}
+  .answer.show{display:block}
+  .codebox{
+    background:var(--code);color:#eaf0ff;padding:18px;border-radius:12px;overflow:auto;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap
+  }
+  .linked-list{
+    display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:15px;background:#f7f9fc;
+    border:1px solid var(--border);border-radius:12px;font-family:monospace
+  }
+  .node{padding:7px 10px;background:white;border:1px solid #cbd5e1;border-radius:8px}
+  .practice{
+    border:2px solid #d6e1ff;background:#f8faff
+  }
+  ul,ol{padding-left:25px}
+  .checklist li{margin:8px 0}
+  .solution-link{
+    display:inline-block;margin-top:8px;padding:8px 12px;background:#eef3ff;border-radius:8px;
+    color:#2346c7;font-weight:700
+  }
+  footer{text-align:center;color:var(--muted);padding:30px}
+  @media(max-width:650px){
+    main{padding:25px 13px 60px}
+    header.hero{padding:28px 22px}
+    .topbar-inner{padding:10px 12px}
+    .title-small{font-size:.85rem}
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="title-small">Linked Lists &amp; Queues</div>
+    <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+    <div class="progress-text" id="progressText">0 / 15</div>
+  </div>
+</div>
+
+<main>
+<header class="hero">
+  <h1>Linked Lists and Queues</h1>
+  <p>Learn how queues work, why arrays can be inefficient for them, and how linked lists can solve the problem.</p>
+</header>
+
+<section class="section">
+  <h2>Intro Activity</h2>
+  <p>Watch the first 20 seconds of the video.</p>
+  <div class="video-placeholder">🎬 Video: Watch the first 20 seconds</div>
+  <p>In the video, the characters were using a web application to buy Comic-Con tickets. This application would have needed to handle many thousands of ticket purchase attempts in a short amount of time. It would have needed to keep track of a line of people waiting to buy tickets.</p>
+  <p>For fairness, the app would also need to keep track of the order that users clicked on the “buy tickets” button in, so that if person A clicks the button before person B, person A will get tickets before person B, just like a line in real life.</p>
+  <p>In the video, Leonard says: “I’m in the queue!!” meaning that he was added to the line, but then he says that his position in line is 50,211, meaning that tickets will probably be sold out before his ticket request reaches the front of the line 🙁.</p>
+
+  <div class="cyu" data-type="mc" data-answer="queue">
+    <div class="cyu-label">CYU</div>
+    <div class="question">The structure that keeps track of all of the people waiting in line for a ticket was called the?</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q1" value="stack"> <span>stack</span></label>
+      <label class="option"><input type="radio" name="q1" value="tree"> <span>tree</span></label>
+      <label class="option"><input type="radio" name="q1" value="queue"> <span>queue</span></label>
+      <label class="option"><input type="radio" name="q1" value="wait list"> <span>wait list</span></label>
+    </div>
+    <button type="button" class="check">Check Answer</button>
+    <div class="feedback"></div>
+  </div>
+
+  <p><strong>Briefly think:</strong> What programming structure might you use to keep track of all of the users that have clicked on the “buy tickets” button?</p>
+  <p>You might have thought to use an Array for this, and that would work, but an array would not be the best choice for speed in this particular scenario.</p>
+  <p>When you add an item to an array, you may need to shift items or create an entirely new array. When deleting an item from an array, items after the deleted item need to move forward. For this reason, both adding and deleting items from an array can have linear time complexity.</p>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">Why is it inefficient to remove an item from the start of an array?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> In an array every item must be shifted forward by one spot. Linked lists don’t store all items side-by-side in memory, so no shifting is required.</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">What do you think the time complexity of removing an item from the start of an array would be?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> Likely linear, because we must access each item in the array and move it forward by one spot. This requires O(n) operations, where n represents the number of items in the array.</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">Why is it sometimes inefficient to add an item to the end of an array?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> If there are no empty spots at the end of an array, an entirely new array must be created, with the new item added to the end. This is not a problem with linked lists because the items don’t need to be stored side-by-side.</div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Queues and Linked Lists</h2>
+  <p>In computer programming, a queue is a programming structure that represents a line. When you remove an item from a queue it is removed from the front of the queue, and when you add an item to the queue, it is added to the end.</p>
+  <p>A good way to make a queue is to create a structure called a linked list, which will store all of the items in the queue.</p>
+  <p>A linked list is sort of like an array, except that the items in a linked list do not need to be stored together in order in memory. Instead, the items can be stored anywhere, because every object in a linked list contains fields which reference the previous item and next item in the list.</p>
+
+  <div class="cyu" data-type="mc" data-answer="The end">
+    <div class="cyu-label">CYU</div>
+    <div class="question">A queue is a data structure that essentially represents a line. When a person is added to a line, they typically are added to the…</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q5" value="The front"> <span>The front</span></label>
+      <label class="option"><input type="radio" name="q5" value="The middle"> <span>The middle</span></label>
+      <label class="option"><input type="radio" name="q5" value="The end"> <span>The end</span></label>
+      <label class="option"><input type="radio" name="q5" value="A random position"> <span>A random position</span></label>
+    </div>
+    <button type="button" class="check">Check Answer</button>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="cyu" data-type="mc" data-answer="The front">
+    <div class="cyu-label">CYU</div>
+    <div class="question">A person typically leaves the line after they reach …</div>
+    <div class="options">
+      <label class="option"><input type="radio" name="q6" value="The front"> <span>The front</span></label>
+      <label class="option"><input type="radio" name="q6" value="The middle"> <span>The middle</span></label>
+      <label class="option"><input type="radio" name="q6" value="The end"> <span>The end</span></label>
+      <label class="option"><input type="radio" name="q6" value="A random position"> <span>A random position</span></label>
+    </div>
+    <button type="button" class="check">Check Answer</button>
+    <div class="feedback"></div>
+  </div>
+
+  <p>A queue is a <strong>“first-in, first-out”</strong> data structure meaning that the item that was added to the queue first will be at the front, and will thus be the first to be removed from the queue.</p>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">Suppose we have the linked list:</div>
+    <div class="linked-list">
+      <span class="node">(Mulan Elsa)</span><span>→</span>
+      <span class="node">(Mulan Elsa Moana)</span><span>→</span>
+      <span class="node">(Elsa Moana Rapunzel)</span><span>→</span>
+      <span class="node">(Moana Rapunzel Jasmine)</span><span>→</span>
+      <span class="node">(Rapunzel Jasmine)</span>
+    </div>
+    <p>Write what the linked list would look like if Elsa was removed from the list.</p>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> (Mulan Moana) (Mulan Moana Rapunzel) (Moana Rapunzel Jasmine) (Rapunzel Jasmine)</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">What change did you make to the Mulan item?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> Updated Mulan’s “next” reference to be Moana instead of Elsa.</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">What change did you make to the Moana item?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> Updated Moana’s “previous” reference to be Mulan instead of Elsa.</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">In general, to remove an item from a linked list that isn’t at the start or end, what must you do? <span class="muted">(Hint: you need to update 2 things)</span></div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> You must update the “next” reference of the item before the one you want to remove and the “previous” reference of the item after the one you want to remove.</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">What would the linked list have looked like if Mulan were removed instead of Elsa?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> (Elsa Moana) (Elsa Moana Rapunzel) (Moana Rapunzel Jasmine) (Rapunzel Jasmine)</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">In general, what changes must you make to the linked list when you remove the first item?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> The second item in the list will be updated to have no previous link and the second item must be set to be the start of the linked list.</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">What would the linked list have looked like if Jasmine were removed instead of Elsa?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> (Mulan Elsa) (Mulan Elsa Moana) (Elsa Moana Rapunzel) (Moana Rapunzel)</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">In general, what changes must you make to the linked list when you remove the last item?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> The second-last item in the list will be updated to have no next link and the last item must be set to be the end of the linked list.</div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Finding Items in a Linked List</h2>
+  <p>Suppose the following objects represent a linked list. Note that the items aren’t written in order. This illustrates that they don’t need to be stored in order in memory since each item contains a reference to the items before and after it.</p>
+  <div class="codebox">(Brock Misty) (Gary Blaine Erika) (Ash Joy Gary) (Blaine Erika) (Brock Misty Ash) (Misty Ash Joy) (Joy Gary Blaine)</div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">Which item is first in the list, which is last? How do you know? Write what this linked list would look like if put in order.</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> Brock is first because it contains no reference to a previous object. Erika is last, because it contains no reference to a next object. The list, in order, would look like:<br><br>(Brock Misty) (Brock Misty Ash) (Misty Ash Joy) (Ash Joy Gary) (Joy Gary Blaine) (Gary Blaine Erika) (Blaine Erika)</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">Suppose you wanted to add Professor Oak in between Ash and Gary… How many items would you need to change? Does the number of changes you need to make depend on the number of items in the list?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> No, the number of items you need to update is 2, regardless of how many items are in the list.</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">What is the time complexity of adding an item to a linked list?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> An addition can be done in constant time O(1).</div>
+  </div>
+
+  <p>There is a problem that arises with linked lists: how can we access an item in the list if it is not at the start or end of the list?</p>
+  <p>To access an item in a linked list, we must start at the beginning of the list and repeatedly access the next link until we have found the item we wish to access. Alternatively, we could start at the end and repeatedly access the previous link. Unfortunately, this takes linear time in the worst case.</p>
+  <p>In contrast, accessing items in an array takes linear time. This is a disadvantage of linked lists compared to arrays.</p>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">When might a linked list be a better option to use than an array?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> A linked list might be a better option if you will need to add or remove items from the start or end of the list more often than the middle, or when you don’t often need to traverse the list to access items that are not at the start or end.</div>
+  </div>
+
+  <div class="cyu" data-type="open">
+    <div class="cyu-label">CYU</div>
+    <div class="question">When might an array be a better option to use than a linked list?</div>
+    <textarea placeholder="Write your answer here..."></textarea>
+    <button type="button" class="check">Check Answer</button>
+    <div class="answer"><strong>Answer:</strong> An array may be the better choice if you don’t often need to add/remove items, or you will often need to access items that are not at the start or end of the list.</div>
+  </div>
+</section>
+
+<section class="section practice">
+  <h2>Practice: Build a Ticket Queue</h2>
+  <p>In this practice exercise, you are going to create a program that will simulate a waiting line for purchasing tickets. You will make your own linked list to represent a queue.</p>
+
+  <h3>1. Create the TicketRequest class</h3>
+  <p>The class should contain 3 fields:</p>
+  <ul class="checklist">
+    <li><code>previousRequest</code> — a TicketRequest representing the previous person in line to buy a ticket</li>
+    <li><code>Requester</code> — a String representing the name of the person requesting to buy a ticket</li>
+    <li><code>nextRequest</code> — a TicketRequest representing the next person in line to buy a ticket</li>
+  </ul>
+  <p>Create a constructor for the TicketRequest class which allows you to pass in a name. The constructor should set <code>previousRequest</code> and <code>nextRequest</code> to <code>null</code>.</p>
+
+  <h3>2. Create the TicketLine class</h3>
+  <p>Your TicketLine class will contain a linked list of TicketRequest objects. It will have 2 fields:</p>
+  <ul>
+    <li>one to store the first TicketRequest in line</li>
+    <li>one to store the last TicketRequest in line</li>
+  </ul>
+  <p>These can both be given initial values of <code>null</code>.</p>
+
+  <h3>3. Add a ticket request</h3>
+  <p>Add an instance method called <code>addTicketRequest(name)</code> which will create a ticket request object and add it to the TicketLine.</p>
+
+  <h3>4. Process a ticket request</h3>
+  <p>Add an instance method called <code>processTicketRequest()</code> which will remove the first ticket request from the linked list. Make sure to handle the situation where the list is empty.</p>
+
+  <h3>5. Protect the linked list</h3>
+  <p>How could you make it so that your linked list cannot be altered except by using the <code>addTicketRequest</code> and <code>processTicketRequest</code> methods?</p>
+
+  <h3>6. Create the main program</h3>
+  <p>In your main method, make a program that will repeatedly ask the user if they want to add a request to the queue or process the first request in the queue.</p>
+  <ul>
+    <li>If they want to add, ask for a name and then add a TicketRequest to the TicketLine.</li>
+    <li>If they want to process, remove the first request from the line.</li>
+    <li>If you would like, make a GUI with a “Request Tickets” button, a textbox for the name, and a “Process First Customer” button for removing the first request from the queue.</li>
+  </ul>
+
+  <a class="solution-link" href="#" onclick="return false;">Practice solutions (link)</a>
+</section>
+
+<section class="section">
+  <h2>Cards — Intro Activity Solution</h2>
+  <p>The cards, in order, were:</p>
+  <div class="codebox">8 of spds, 4 of dmnds, A of clubs, king of spds, 9 of dmnds, 6 of clubs, 2 of dmnds, 4 of hearts, 7 of spds</div>
+</section>
+
+<footer>
+  Linked Lists and Queues • Interactive Lesson
+</footer>
+</main>
+
+<script>
+  const questions = [...document.querySelectorAll(".cyu")];
+  const progress = document.getElementById("progress");
+  const progressText = document.getElementById("progressText");
+
+  function updateProgress(){
+    const checked = questions.filter(q => q.dataset.done === "true").length;
+    const percent = questions.length ? (checked / questions.length) * 100 : 0;
+    progress.style.width = percent + "%";
+    progressText.textContent = `${checked} / ${questions.length}`;
+  }
+
+  questions.forEach(card => {
+    const button = card.querySelector(".check");
+
+    button.addEventListener("click", () => {
+      if(card.dataset.type === "mc"){
+        const selected = card.querySelector("input[type=radio]:checked");
+        const feedback = card.querySelector(".feedback");
+
+        if(!selected){
+          feedback.className = "feedback show incorrect";
+          feedback.textContent = "Please select an answer first.";
+          return;
+        }
+
+        const correct = card.dataset.answer;
+        const selectedValue = selected.value;
+
+        if(selectedValue.toLowerCase() === correct.toLowerCase()){
+          feedback.className = "feedback show correct";
+          feedback.innerHTML = "<strong>Correct!</strong> Nice work.";
+        }else{
+          feedback.className = "feedback show incorrect";
+          let explanation = "That choice does not match the definition described in the lesson.";
+          if(card.dataset.answer.toLowerCase() === "queue"){
+            explanation = "A queue represents a line where items are processed in first-in, first-out (FIFO) order.";
+          }else if(card.dataset.answer.toLowerCase() === "the end"){
+            explanation = "New people are added to the end of a normal queue so that people already waiting keep their position.";
+          }else if(card.dataset.answer.toLowerCase() === "the front"){
+            explanation = "People leave from the front because the person who has waited the longest is served first.";
+          }
+          feedback.innerHTML = `<strong>Not quite.</strong> The correct answer is <strong>${correct}</strong>.<div class="why">${explanation}</div>`;
+        }
+      }else{
+        const answer = card.querySelector(".answer");
+        answer.classList.add("show");
+      }
+
+      card.dataset.done = "true";
+      updateProgress();
+    });
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
