@@ -270,7 +270,11 @@
     <div class="question">What would the linked list have looked like if Mulan were removed instead of Elsa?</div>
     <textarea placeholder="Write your answer here..."></textarea>
     <button type="button" class="check">Check Answer</button>
-    <div class="answer"><strong>Answer:</strong> (Elsa Moana) (Elsa Moana Rapunzel) (Moana Rapunzel Jasmine) (Rapunzel Jasmine)</div>
+    <div class="answer"><strong>Answer:</strong> (Elsa <sub>Moana</sub>)
+(<sub>Elsa</sub> Moana <sub>Rapunzel</sub>)
+(<sub>Moana</sub> Rapunzel <sub>Jasmine</sub>)
+(<sub>Rapunzel</sub> Jasmine)
+</div>
   </div>
 
   <div class="cyu" data-type="open">
@@ -286,7 +290,10 @@
     <div class="question">What would the linked list have looked like if Jasmine were removed instead of Elsa?</div>
     <textarea placeholder="Write your answer here..."></textarea>
     <button type="button" class="check">Check Answer</button>
-    <div class="answer"><strong>Answer:</strong> (Mulan Elsa) (Mulan Elsa Moana) (Elsa Moana Rapunzel) (Moana Rapunzel)</div>
+    <div class="answer"><strong>Answer:</strong> (Mulan <sub>Elsa</sub>)
+(<sub>Mulan</sub> Elsa <sub>Moana</sub>)
+(<sub>Elsa</sub> Moana <sub>Rapunzel</sub>)
+(<sub>Moana</sub> Rapunzel)</div>
   </div>
 
   <div class="cyu" data-type="open">
@@ -301,14 +308,21 @@
 <section class="section">
   <h2>Finding Items in a Linked List</h2>
   <p>Suppose the following objects represent a linked list. Note that the items aren’t written in order. This illustrates that they don’t need to be stored in order in memory since each item contains a reference to the items before and after it.</p>
-  <div class="codebox">(Brock Misty) (Gary Blaine Erika) (Ash Joy Gary) (Blaine Erika) (Brock Misty Ash) (Misty Ash Joy) (Joy Gary Blaine)</div>
+  <div class="codebox">(Brock <sub>Misty</sub>) (<sub>Gary</sub> Blaine <sub>Erika</sub>) (<sub>Ash</sub> Joy <sub>Gary</sub>) (<sub>Blaine</sub> Erika) (<sub>Brock</sub> Misty <sub>Ash</sub>) (<sub>Misty</sub> Ash <sub>Joy</sub>) (<sub>Joy</sub> Gary <sub>Blaine</sub>)</div>
 
   <div class="cyu" data-type="open">
     <div class="cyu-label">CYU</div>
     <div class="question">Which item is first in the list, which is last? How do you know? Write what this linked list would look like if put in order.</div>
     <textarea placeholder="Write your answer here..."></textarea>
     <button type="button" class="check">Check Answer</button>
-    <div class="answer"><strong>Answer:</strong> Brock is first because it contains no reference to a previous object. Erika is last, because it contains no reference to a next object. The list, in order, would look like:<br><br>(Brock Misty) (Brock Misty Ash) (Misty Ash Joy) (Ash Joy Gary) (Joy Gary Blaine) (Gary Blaine Erika) (Blaine Erika)</div>
+    <div class="answer"><strong>Answer:</strong> Brock is first because it contains no reference to a previous object. Erika is last, because it contains no reference to a next object. The list, in order, would look like:<br><br>(Brock <sub>Misty</sub>)
+(<sub>Brock</sub> Misty <sub>Ash</sub>)
+(<sub>Misty</sub> Ash <sub>Joy</sub>)
+(<sub>Ash</sub> Joy <sub>Gary</sub>)
+(<sub>Joy</sub> Gary <sub>Blaine</sub>)
+(<sub>Gary</sub> Blaine <sub>Erika</sub>)
+(<sub>Blaine</sub> Erika)
+</div>
   </div>
 
   <div class="cyu" data-type="open">
