@@ -132,15 +132,15 @@
   <h2>Intro Activity</h2>
   <p>The cards shown in the images below were arranged in a row on a table. You cannot remember the order the cards were arranged in, but you took pictures of all of them so that you could put them back on the table in the same order at some point. Determine the original order that the cards were arranged in.</p>
   <div class="cards">
-    <img src="mrHapps725/learning materials/CS/Data Structures and Algorithms/images/2_of_diamonds.png">
-    <img src="learning materials/cs/data structures and algorithms/images/4 of diamonds.png" alt="4 of diamonds">
-    <img src="learning materials/cs/data structures and algorithms/images/4 of hearts.png" alt="4 of hearts">
-    <img src="learning materials/cs/data structures and algorithms/images/6 of clubs.png" alt="6 of clubs">
-    <img src="learning materials/cs/data structures and algorithms/images/7 of spades.png" alt="7 of spades">
-    <img src="learning materials/cs/data structures and algorithms/images/8 of spades.png" alt="8 of spades">
-    <img src="learning materials/cs/data structures and algorithms/images/9 of diamonds.png" alt="9 of diamonds">
-    <img src="learning materials/cs/data structures and algorithms/images/ace of clubs.png" alt="Ace of clubs">
-    <img src="learning materials/cs/data structures and algorithms/images/king of spades.png" alt="King of spades">
+    <img src="learning-materials/cs/data-structures-and-algorithms/images/2_of_diamonds.png">
+    <img src="learning-materials/cs/data-structures-and-algorithms/images/4_of_diamonds.png">
+    <img src="learning-materials/cs/data-structures-and-algorithms/images/4_of_hearts.png">
+    <img src="learning-materials/cs/data-structures-and-algorithms/images/6_of_clubs.png">
+    <img src="learning-materials/cs/data-structures-and-algorithms/images/7_of_spades.png">
+    <learning-materials/cs/data-structures-and-algorithms/images/8_of_spades.png">
+    <img src="learning-materials/cs/data-structures-and-algorithms/images/9_of_diamonds.png">
+    <img src="learning-materials/cs/data-structures-and-algorithms/images/ace_of_clubs.png">
+    <img src="learning-materials/cs/data-structures-and-algorithms/images/king_of_spades.png">
   </div>
 
  
