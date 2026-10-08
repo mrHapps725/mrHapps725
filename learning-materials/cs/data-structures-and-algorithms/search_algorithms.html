@@ -37,6 +37,43 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
     background-color: #e74c3c !important; /* red */
     color: white;
   }
+/* Outer blue bar */
+.slot-frame {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    background: blue;
+    overflow: hidden; /* hides reel overflow */
+}
+
+/* The moving image underneath */
+.reel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40px;
+    width: auto;
+    transition: transform 0.3s ease-out;
+}
+
+/* The translucent orange window */
+.slot-frame::after {
+    content: "";
+    position: absolute;
+
+    /* Center the window */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 60px;
+    height: 20px;
+
+    background: rgba(255, 165, 0, 0.1); /* orange tint, 90% transparent */
+    border-radius: 6px; /* rounded corners */
+    pointer-events: none; /* clicks pass through */
+}
+
 </style>
 
 
@@ -50,6 +87,12 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 
 <main>
 <section class="section">
+<h2>Intro Activity</h2>
+<div class="slot-frame">
+    <img src="names.jpg" class="reel" id="reel">
+</div>
+
+<button onclick="spin()">Spin</button>
 <span class="tag">Coding activity / warm-up</span><h2>Find an item in an array</h2>
 <p>Create a static method called <code>findIndex</code>, which takes in an array of Strings and a String to search for and returns the index of that String in the array, or <code>-1</code> if the String is not in the array.</p>
 <p>Create an array of at least 5 Strings and try using it to search for a String that exists in the array and a String that doesn't.</p>
@@ -73,7 +116,7 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 <p>State the worst-case time complexity of your method, in Big O notation, where <code>n</code> represents the length of the input array.</p>
 <button onclick="reveal(this)">Check Answer</button><div class="answer">The loop can run a maximum of <code>n</code> times, once for each item. The work per iteration does not depend on the array size, so the worst-case time complexity is <strong>O(n)</strong>.</div>
 
-<div class="question" data-q><h3>Check Your Understanding 2</h3>
+
 <p>Which of the following is <strong>not</strong> true about linear search?</p>
 <div class="options">
 <label><input type="radio" name="q2" value="a"> It is useful for searching through a collection that is not ordered.</label>
@@ -81,7 +124,7 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 <label><input type="radio" name="q2" value="c"> The search loop will always run n times before the algorithm is finished.</label>
 <label><input type="radio" name="q2" value="d"> A linear search could start searching from the beginning or end of a collection.</label>
 </div><button onclick="mcq(this,'c','The search can stop early when the item is found. It only examines all n items when the item is absent or is the final item.')">Check Answer</button><div class="feedback"></div>
-</div>
+
 </section>
 
 
@@ -104,7 +147,7 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 <div id="response"></div>
 <div id="gameResponse"></div><div id="remaining">Remaining questions: <span id="remainNum">7</span></div>
 <div class="grid" id="grid"></div>
-<details><summary>Need a hint! Click here</summary><p>Hint: Can you come up with a question that is guaranteed to eliminate a significant portion of the boxes, regardless of whether the answer is yes or no?</p></details>
+<details><summary>Need a hint? Click here!</summary><p>Hint: Can you come up with a question that is guaranteed to eliminate a significant portion of the boxes, regardless of whether the answer is yes or no?</p></details>
 
 
 
@@ -130,11 +173,11 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
     
 <section class="section">
 <h2>Understanding binary search</h2>
-<div class="question" data-q><h3>Practice 4</h3><p>Suppose we wanted to search through an alphabetically ordered array of Strings for the word <strong>“jump.”</strong> How could we ask a question that would tell us which half contains the word, if it exists?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word and compare it alphabetically with “jump.” If the middle word comes before “jump,” search the right half. If it comes after “jump,” search the left half.</div></div>
+<div class="question" data-q><h3>Practice 4</h3><p>Suppose we wanted to search through an alphabetically ordered array of 100 Strings for the word <strong>“jump.”</strong> How could we ask a question that would tell us which half contains the word, if it exists?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word and compare it alphabetically with “jump.” If the middle word comes before “jump,” search the right half. If it comes after “jump,” search the left half.</div></div>
 
-<div class="question" data-q><h3>Practice 5</h3><p>If the word were in the right half, how could we once more cut the remaining possible positions of “jump” in half?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word of the right half and compare it with “jump.” If that middle word comes before “jump,” keep the right part of that half; otherwise keep the left part.</div></div>
+<div class="question" data-q><h3>Practice 5</h3><p>If the word were in the right half, how could we once more cut the remaining possible positions of “jump” in half?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word of the right half and compare it with “jump.” If that middle word comes before “jump,” search the right part of that half; if it comes after, search the left part.</div></div>
 
-<div class="question" data-q><h3>Practice 6</h3><p>Suppose we had an array of 161 words in alphabetical order. Explain how you would find the middle index.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">There are 161 items, so there is one middle item. There are 80 items before and 80 after it. The middle is the 81st item, which is <strong>index 80</strong> because array indices start at 0.</div></div>
+<div class="question" data-q><h3>Practice 6</h3><p>Suppose we had an array of 161 words in alphabetical order. Explain how you would find the middle index.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">There are 161 items. Since 161 is an odd number, there is one middle item. There are 80 items before and 80 after it. The middle is the 81st item, which is <strong>index 80</strong> because array indices start at 0.</div></div>
 
 <div class="question" data-q><h3>Practice 7</h3><p>What are the start and end indices of the left half, excluding the middle?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The left half is <strong>0 through 79</strong>.</div></div>
 
@@ -224,7 +267,18 @@ function mark(q){if(!q.dataset.checked){q.dataset.checked='1';checked++;progress
 function reveal(btn){const q=btn.closest('[data-q]');q.querySelector('.answer').classList.add('show');q.classList.add('correct');btn.disabled=true;mark(q)}
 function mcq(btn,correct,why){const q=btn.closest('[data-q]'),sel=q.querySelector('input:checked'),f=q.querySelector('.feedback');if(!sel){f.className='feedback show bad';f.textContent='Please select an answer first.';return}const label=q.querySelector('input[value="'+correct+'"]').parentElement;if(sel.value===correct){f.className='feedback show good';f.innerHTML='<strong>Correct!</strong> You selected the right answer.';q.classList.add('correct')}else{f.className='feedback show bad';f.innerHTML='<strong>Not quite.</strong> The correct answer is: <strong>'+label.textContent.trim()+'</strong><br>'+why;q.classList.add('incorrect')}btn.disabled=true;mark(q)}
 
+function spin() {
+    const reel = document.getElementById("reel");
 
+    // Move left by 50px
+    reel.style.transform = "translateX(-50px)";
+
+    // Optional: reset after animation
+    setTimeout(() => {
+        reel.style.transform = "translateX(0px)";
+    }, 300);
+}
+    
 function newGame(){
   
   // Generate random jackpot number
