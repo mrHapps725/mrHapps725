@@ -309,7 +309,7 @@ function newGame(){
             
           } else {
             btn.classList.add("lose");
-            document.getElementById("response").textContent = "👁️👄👁️Uh oh, that box was empty! The jackpot was under box number "+jackpot+". Click the new game button to reset and try again! When you click the new game button, a new box will be randomly selected to contain the jackpot.;
+            document.getElementById("response").textContent = "👁️👄👁️Uh oh, that box was empty! The jackpot was under box number "+jackpot+". Click the new game button to reset and try again! When you click the new game button, a new box will be randomly selected to contain the jackpot.";
             gameLost = 1;
             
           }
@@ -386,7 +386,7 @@ function newGame(){
     }
 
     const answer = evaluate(op, val);
-    text = answer ? "Yes, the number on the box containing the jackpot is "+operatorWord+val : "No, the number on the box containing the jackpot is not "+operatorWord+val";
+    text = answer ? "Yes, the number on the box containing the jackpot is "+operatorWord+val : "No, the number on the box containing the jackpot is not "+operatorWord+val;
 
     document.getElementById("response").textContent = text;
 
