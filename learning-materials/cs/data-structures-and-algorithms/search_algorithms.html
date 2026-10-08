@@ -51,8 +51,8 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 <main>
 <section class="section">
 <span class="tag">Coding activity / warm-up</span><h2>Find an item in an array</h2>
-<p>Create a static method called <code>findIndex</code>, which takes in an array of Strings and a String to search for and returns the index of that string in the array, or <code>-1</code> if the string is not in the array.</p>
-<p>Create a list of at least 5 strings and try using it to search for a string that exists in the array and a string that doesn't.</p>
+<p>Create a static method called <code>findIndex</code>, which takes in an array of Strings and a String to search for and returns the index of that String in the array, or <code>-1</code> if the String is not in the array.</p>
+<p>Create an array of at least 5 Strings and try using it to search for a String that exists in the array and a String that doesn't.</p>
 <p>If you are stuck, try the <a href="https://drive.google.com/file/d/1zxcJ9FV313BlUj1yZVWJW4EOo4c5UHA8/view?usp=sharing" target="_blank" rel="noopener">guided walkthrough video</a>.</p>
 <details><summary>Model solution</summary><pre><code>public static int findIndex(String[] arr, String target) {
     for (int i = 0; i &lt; arr.length; i++) {
@@ -67,11 +67,11 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 <section class="section">
 <h2>Linear search</h2>
 <p>Your <code>findIndex</code> method probably used a loop. The loop probably started at the first item in the array and moved forward through the list, checking each item to see if it is what you are searching for.</p>
-<p>When you search through a list sequentially (in order, one at a time), it is called a <strong>linear search</strong>. This is useful when there is no particular order to the content being searched.</p>
+<p>When you search through an a collection of items sequentially (in order, one at a time), it is called a <strong>linear search</strong>. This is useful when there is no particular order to the content being searched.</p>
 
 <div class="question" data-q><h3>Check Your Understanding 1</h3>
-<p>Determine the worst-case time complexity, in Big O notation, of your method, where <code>n</code> represents the length of the input array.</p>
-<button onclick="reveal(this)">Check Answer</button><div class="answer">The loop can run a maximum of <code>n</code> times, once for each item. The work per iteration does not depend on the array size, so the worst-case time complexity is <strong>O(n)</strong>.</div></div>
+<p>State the worst-case time complexity of your method, in Big O notation, where <code>n</code> represents the length of the input array.</p>
+<button onclick="reveal(this)">Check Answer</button><div class="answer">The loop can run a maximum of <code>n</code> times, once for each item. The work per iteration does not depend on the array size, so the worst-case time complexity is <strong>O(n)</strong>.</div>
 
 <div class="question" data-q><h3>Check Your Understanding 2</h3>
 <p>Which of the following is <strong>not</strong> true about linear search?</p>
@@ -80,7 +80,8 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 <label><input type="radio" name="q2" value="b"> It compares each item in a collection, one at a time, to the item being searched for.</label>
 <label><input type="radio" name="q2" value="c"> The search loop will always run n times before the algorithm is finished.</label>
 <label><input type="radio" name="q2" value="d"> A linear search could start searching from the beginning or end of a collection.</label>
-</div><button onclick="mcq(this,'c','The search can stop early when the item is found. It only examines all n items when the item is absent or is the final item.')">Check Answer</button><div class="feedback"></div></div>
+</div><button onclick="mcq(this,'c','The search can stop early when the item is found. It only examines all n items when the item is absent or is the final item.')">Check Answer</button><div class="feedback"></div>
+</div>
 </section>
 
 
@@ -94,25 +95,26 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 <body>
 
 <h2>The Binary Search</h2>
-<p>Try to come up with a strategy that will allow you to win this 100 boxes game every time.</p>
+<p>The objective of this activity is to try to come up with a strategy that will allow you to win this 100 boxes game every time.</p>
 <div class="game">
 <h3>100 Boxes Game</h3>
-<p>A $1,000,000 jackpot is in one of these 100 boxes! You can ask up to <strong>7 yes/no questions</strong> to find out which box contains the jackpot. After that, click on the box you believe contains the money. If you guess correctly, you win!</p>
-<p class="hint">Enter one of <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, or <code>=</code>, followed by an integer from 1 to 100. </br>For example, entering <code>&lt;= and 5</code> asks whether the jackpot is in box 5 or lower.</p>
+<p>A $1,000,000 jackpot is in one of these 100 boxes! You can ask up to <strong>7 yes/no questions</strong> to find out which box contains the jackpot. After that, click on the box you believe contains the money. If you guess correctly, you win! Click on the dropdown below the grid of boxes for a hint if you are stuck.</p>
+<p class="hint">Into the first box below, enter one of following comparison operators:<code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, or <code>=</code>; followed by an integer from 1 to 100 in the next box. </br>For example, entering <code>&lt;= and 5</code> asks whether the number on the box containing the jackpot is less than 5.</p>
 <div class="game-inputs">Is the box number <input id="opBox" placeholder="&lt;, &gt;, &lt;=, &gt;="><input id="valBox" type="number" min="1" max="100" placeholder="1–100"><button id="enterBtn">Enter</button><button id="resetGame">New Game</button></div>
-
-<div class="grid" id="grid"></div>
-
 <div id="response"></div>
+<div id="gameResponse"></div><div id="remaining">Remaining questions: <span id="remainNum">7</span></div>
+<div class="grid" id="grid"></div>
+<details><summary>Need a hint! Click here</summary><p>Hint: Can you come up with a question that is guaranteed to eliminate a significant portion of the boxes, regardless of whether the answer is yes or no?</p></details>
 
-<div class="grid" id="grid"></div><div id="gameResponse"></div><div id="remaining">Remaining questions: <span id="remainNum">7</span></div>
+
+
 </div>
 
 <div class="question" data-q><h3>Practice 1</h3><p>Try to come up with a strategy that will allow you to win the 100 boxes game every time. Then share your strategy with a partner. Your partner must play using your algorithm, and you may not instruct them while they play.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Ask questions that split the remaining possible boxes as evenly as possible. Start with a midpoint such as “Is it ≤ 50?” Then continue with the midpoint of whichever half remains. Each question roughly halves the possibilities.</div></div>
 
 <div class="question" data-q><h3>Practice 2</h3><p>Could you use a similar strategy to find a word in an English dictionary? Describe your strategy to a partner.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Yes. Because dictionary words are alphabetically ordered, open near the middle and compare that word with the target. Ignore the half where the target cannot be, then repeat with the remaining half until you find the word or have no possibilities left.</div></div>
 
-<p>When you are searching through an ordered list, an algorithm faster than linear search is called <strong>binary search</strong>. If you found a functional strategy for the 100 boxes game, you may already have the main idea behind binary search.</p>
+<p>When you are searching through an ordered collection of items, an algorithm faster than linear search is called <strong>binary search</strong>. If you found a functional strategy for the 100 boxes game, you may already have the main idea behind binary search.</p>
 <p>In the 100 boxes game, we can identify one box among 100 in only 7 questions. This is much better than checking every box, which could require 100 checks.</p>
 
 <div class="question" data-q><h3>Practice 3 — Multiple Choice</h3><p>What strategy allowed us to consistently figure out which box contained the jackpot in only 7 steps?</p>
@@ -128,7 +130,7 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
     
 <section class="section">
 <h2>Understanding binary search</h2>
-<div class="question" data-q><h3>Practice 4</h3><p>Suppose we wanted to search through an alphabetically ordered array of strings for the word <strong>“jump.”</strong> How could we ask a question that would tell us which half contains the word, if it exists?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word and compare it alphabetically with “jump.” If the middle word comes before “jump,” search the right half. If it comes after “jump,” search the left half.</div></div>
+<div class="question" data-q><h3>Practice 4</h3><p>Suppose we wanted to search through an alphabetically ordered array of Strings for the word <strong>“jump.”</strong> How could we ask a question that would tell us which half contains the word, if it exists?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word and compare it alphabetically with “jump.” If the middle word comes before “jump,” search the right half. If it comes after “jump,” search the left half.</div></div>
 
 <div class="question" data-q><h3>Practice 5</h3><p>If the word were in the right half, how could we once more cut the remaining possible positions of “jump” in half?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word of the right half and compare it with “jump.” If that middle word comes before “jump,” keep the right part of that half; otherwise keep the left part.</div></div>
 
@@ -148,7 +150,7 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
     return (start + end) / 2;
 }</code></pre></div></div>
 
-<div class="question" data-q><h3>Practice 12 — Coding</h3><p>Suppose you have an array of strings called <code>words</code>. Determine the start/end indices of the left and right halves, excluding the middle, and determine the middle index of each half. You may use <code>findMid</code>.</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre><code>int start = 0;
+<div class="question" data-q><h3>Practice 12 — Coding</h3><p>Suppose you have an array of Strings called <code>words</code>. Determine the start/end indices of the left and right halves, excluding the middle, and determine the middle index of each half. You may use <code>findMid</code>.</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre><code>int start = 0;
 int end = words.length - 1;
 int mid = findMid(words, start, end);
 
@@ -249,11 +251,11 @@ function newGame(){
       if (gameLost === 0 && !btn.classList.contains("grey")){
           if (i === jackpot) {
             btn.classList.add("win");
-            document.getElementById("response").textContent = "YOU WIN!";
+            document.getElementById("response").textContent = "YOU WIN! 🫨🫨🫨";
             
           } else {
             btn.classList.add("lose");
-            document.getElementById("response").textContent = "YOU LOSE!";
+            document.getElementById("response").textContent = "👁️👄👁️Uh oh, that box was empty! The jackpot was under box number "+jackpot+". Click the new game button to reset and try again! When you click the new game button, a new box will be randomly selected to contain the jackpot.;
             gameLost = 1;
             
           }
@@ -302,8 +304,8 @@ function newGame(){
   document.getElementById('resetGame').onclick = newGame;
 
   document.getElementById("enterBtn").onclick = () =>{
-    if (remaining === 0) {
-      alert("No questions left — you must guess the jackpot number!");
+    if (remaining === 1) {
+      alert("No questions left — you must guess the jackpot number! Click on the box that you believe ontains the jackpot.");
       return;
     }
     
@@ -316,8 +318,21 @@ function newGame(){
       return;
     }
 
+    let operatorWord;
+    if(op === "<"){
+        operatorWord= " less than ";
+    }else if(op === ">"){
+        operatorWord= " greater than ";
+    }else if(op === "<="){
+        operatorWord= " less than or equal to ";
+    }else if(op === ">="){
+        operatorWord= " greater than or equal to ";
+    }else if(op === "="){
+        operatorWord= " equal to ";
+    }
+
     const answer = evaluate(op, val);
-    text = answer ? "YES" : "NO";
+    text = answer ? "Yes, the number on the box containing the jackpot is "+operatorWord+val : "No, the number on the box containing the jackpot is not "+operatorWord+val";
 
     document.getElementById("response").textContent = text;
 
