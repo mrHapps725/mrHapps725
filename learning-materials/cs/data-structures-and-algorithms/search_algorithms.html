@@ -12,11 +12,15 @@
 header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:white;padding:42px 20px}header>div,main,.progress-in{max-width:1050px;margin:auto}
 h1{margin:0 0 6px;font-size:2.4rem}h2{color:#173b75;margin-top:0}h3{margin-top:0}
 main{padding:28px 20px 70px}.section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:24px;box-shadow:0 2px 7px #00000008}
-.progress{position:sticky;top:0;z-index:5;background:white;border-bottom:1px solid var(--border);padding:10px 20px}.progress-in{display:flex;gap:12px;align-items:center}.bar{height:9px;background:#e5e7eb;border-radius:20px;flex:1;overflow:hidden}.bar span{display:block;height:100%;width:0;background:var(--blue);transition:.25s}
+.progress{position:sticky;top:0;z-index:40;background:white;border-bottom:1px solid var(--border);padding:10px 20px}.progress-in{display:flex;gap:12px;align-items:center}.bar{height:9px;background:#e5e7eb;border-radius:20px;flex:1;overflow:hidden}.bar span{display:block;height:100%;width:0;background:var(--blue);transition:.25s}
 .question{background:#fbfdff;border:1px solid var(--border);border-radius:12px;padding:19px;margin:20px 0}.question.correct{background:#f0fdf4;border-color:#86efac}.question.incorrect{background:#fff7f7;border-color:#fca5a5}
 .options label{display:block;background:white;border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin:8px 0;cursor:pointer}.options input{margin-right:8px}
 button{border:0;border-radius:8px;background:var(--blue);color:white;padding:9px 15px;font-weight:bold;cursor:pointer}button:disabled{opacity:.6;cursor:default}
-.feedback,.answer{display:none;margin-top:13px;padding:12px 14px;border-radius:8px}.feedback.show,.answer.show{display:block}.feedback.good{background:var(--goodbg);color:var(--good)}.feedback.bad{background:var(--badbg);color:var(--bad)}.answer{background:#eef2ff;border-left:4px solid #6366f1}
+.feedback,.answer{display:none;margin-top:13px;padding:12px 14px;border-radius:8px}
+.feedback.show,.answer.show{display:block}
+.feedback.good{background:var(--goodbg);color:var(--good)}
+.feedback.bad{background:var(--badbg);color:var(--bad)}
+.answer{background:#eef2ff;border-left:4px solid #6366f1}
 pre{background:#111827;color:#e5e7eb;padding:17px;border-radius:9px;overflow:auto}code{font-family:Consolas,monospace}
 .callout{background:#eff6ff;border-left:5px solid var(--blue);padding:14px 17px;border-radius:8px}.tag{display:inline-block;background:#e0e7ff;color:#3730a3;padding:2px 8px;border-radius:20px;font-size:.8rem;font-weight:bold}
 a{color:#1d4ed8;font-weight:bold}
@@ -37,43 +41,92 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
     background-color: #e74c3c !important; /* red */
     color: white;
   }
-/* Outer blue bar */
 .slot-frame {
     position: relative;
-    width: 100%;
-    height: 40px;
-    background: blue;
-    overflow: hidden; /* hides reel overflow */
+    width: 100%;   /* whatever your width is */
+    height: 40px;   /* height of the blue bar */
+    overflow: hidden;
 }
 
-/* The moving image underneath */
+/* Reel underneath */
 .reel {
-    position: absolute;
+    position: relative;
     top: 0;
-    left: 0;
+    left: calc(50% - 50px);
     height: 40px;
-    width: auto;
-    transition: transform 0.3s ease-out;
+    z-index: 1;
+    transform: translateX(0px);
 }
 
-/* The translucent orange window */
-.slot-frame::after {
-    content: "";
+.slot-window {
     position: absolute;
-
-    /* Center the window */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    width: 60px;
-    height: 20px;
-
-    background: rgba(255, 165, 0, 0.1); /* orange tint, 90% transparent */
-    border-radius: 6px; /* rounded corners */
-    pointer-events: none; /* clicks pass through */
+    width: 100px;
+    height: 20px; /* or whatever your window height is */
+    left: calc(50% - 50px); /* centers a 100px window */
+    top: 10px;
+    z-index: 20;
+    background: rgba(10, 80, 220, 0.15); /* orange tint, 90% transparent */
+    /* 255,165,0 = orange; alpha 0.1 = 90% transparent */
 }
 
+/* Blue blocks that form the mask */
+.mask-left,
+.mask-right,
+.mask-top,
+.mask-bottom {
+    position: absolute;
+    background: blue;
+    z-index: 10; /* ABOVE reel */
+}
+
+/* Left and right blocks */
+.mask-left {
+    left: 0;
+    top: 0;
+    width: calc(50% - 50px); /* half minus half window width */
+    height: 40px;
+    border-radius: 10px;
+}
+
+.mask-right {
+    right: 0;
+    top: 0;
+    width: calc(50% - 50px);
+    height: 40px;
+    border-radius: 10px;
+}
+
+/* Top and bottom blocks */
+.mask-top {
+    left: calc(50% - 60px);
+    top: 0;
+    width: 120px; /* window width */
+    height: 10px; /* top thickness */
+}
+
+.mask-bottom {
+    left: calc(50% - 60px);
+    bottom: 0;
+    width: 120px;
+    height: 10px; /* bottom thickness */
+}
+
+/* Spin button */
+#leftShift {
+    position: absolute;
+    left: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+}
+
+#rightShift {
+    position: absolute;
+    right: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 30;
+}
 </style>
 
 
@@ -83,21 +136,52 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 </head>
 <body>
 <header><div><h1>Search Algorithms</h1><div>Linear search, binary search, and strategies for searching ordered data.</div></div></header>
-<div class="progress"><div class="progress-in"><div class="bar"><span id="progressBar"></span></div><small><span id="progressCount">0</span> / <span id="progressTotal">0</span> checked</small></div></div>
+<div class="progress"><div class="progress-in"><div class="bar"><span id="progressBar"></span></div><small><span id="progressCount">0</span> / <span id="progressTotal">0</span> checked</small>
+<button id="speak">Speak Highlighted Text</button><p>Speech speed:</p><input type="range" id="speedSlider" min="0.5" max="2.0" step="0.1" value="1.0">
+</div></div>
 
 <main>
 <section class="section">
 <h2>Intro Activity</h2>
 <div class="slot-frame">
-    <img src="./images/names.png" class="reel" id="reel">
+    <img id="reel" class="reel" src="./images/names.png">
+    <button id="leftShift" onclick="shiftLeft()">&lt</button>
+    <div class="mask-left"></div>
+    <div class="mask-right"></div>
+    <div class="mask-top"></div>
+    <div class="mask-bottom"></div>
+    <div class="slot-window"></div>
+    <button id="rightShift" onclick="shiftRight()">&gt</button>
 </div>
 
-<button onclick="spin()">Spin</button>
-<span class="tag">Coding activity / warm-up</span><h2>Find an item in an array</h2>
+<div class="question" data-q><p>Use the arrow buttons to search the list of names above for the name Jacob. Does it exist in the list? If so, at what index (position)? If not, at what point did you become sure it wasn't? Note: the left arrow will reset the list back to the first name (ie. index 0 in the list).</p>
+<button onclick="reveal(this)">Check Answer</button><div class="answer">
+Yes — Jacob exists in the list; It appears at index 4 (counting from 0).
+</div></div>
+
+<div class="question" data-q><p>Search the list above for the name Supriya. Does it exist in the list? If so, at what index? If not, at what point did you become sure it wasn't?</p>
+<button onclick="reveal(this)">Check Answer</button><div class="answer">
+No — Supriya does not appear anywhere in the list. You can be sure it does not exist once you have reached the last item in the list, and still have not encountered the name Supriya.
+</div></div>
+
+<div class="question" data-q><p>Suppose you needed to find a name in the list above that contains the letter x, and state its index. Describe how you would do this. Feel free to try it.</p>
+<button onclick="reveal(this)">Check Answer</button><div class="answer">
+Look through the list, one word at a time, scanning each name to see if it contains the letter x. Keep a running total of how many names you have already looked at. If you reach a name that contains the letter x, its index is equal to the number of names you have already looked through.
+</div></div>
+
+<div class="question" data-q><p>Suppose a list of names was in alphabetical order and you needed to search for the name Albert. Would you search until you reached the end of the list? If not, how would you know when to stop?</p>
+<button onclick="reveal(this)">Check Answer</button><div class="answer">
+Since the list is in alphabetical order, you could start at the beginning and stop as soon as you reach a name that would come alphabetically after Albert. For example, if you encountered the name Byron, you would know that you if Albert was in the list you would have already encountered it.
+</div></div>
+
+
+
+<br/>
+<span class="tag">Coding activity</span><h2>Find an item in an array</h2>
 <p>Create a static method called <code>findIndex</code>, which takes in an array of Strings and a String to search for and returns the index of that String in the array, or <code>-1</code> if the String is not in the array.</p>
 <p>Create an array of at least 5 Strings and try using it to search for a String that exists in the array and a String that doesn't.</p>
-<p>If you are stuck, try the <a href="https://drive.google.com/file/d/1zxcJ9FV313BlUj1yZVWJW4EOo4c5UHA8/view?usp=sharing" target="_blank" rel="noopener">guided walkthrough video</a>.</p>
-<details><summary>Model solution</summary><pre><code>public static int findIndex(String[] arr, String target) {
+<p>If you are stuck, try the <a href="https://drive.google.com/file/d/1wHzPP-kw9V27Wl8IgjBy6srN48SnpaKc/view?usp=sharing" target="_blank" rel="noopener">guided walkthrough video</a>.</p>
+<details><summary>Example solution</summary><pre><code>public static int findIndex(String[] arr, String target) {
     for (int i = 0; i &lt; arr.length; i++) {
         if (arr[i].equals(target)) {
             return i;
@@ -109,22 +193,32 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 
 <section class="section">
 <h2>Linear search</h2>
-<p>Your <code>findIndex</code> method probably used a loop. The loop probably started at the first item in the array and moved forward through the list, checking each item to see if it is what you are searching for.</p>
+<p>Your <code>findIndex</code> method from the coding activity above probably used a loop. The loop probably started at the first item in the array and moved forward through it, one item at a time, checking each one to see if it was what you were searching for.</p>
 <p>When you search through an a collection of items sequentially (in order, one at a time), it is called a <strong>linear search</strong>. This is useful when there is no particular order to the content being searched.</p>
 
-<div class="question" data-q><h3>Check Your Understanding 1</h3>
+<div class="question" data-q>
+<div></div><h3>Check Your Understanding 1</h3>
+<div class="question" data-q>
 <p>State the worst-case time complexity of your method, in Big O notation, where <code>n</code> represents the length of the input array.</p>
-<button onclick="reveal(this)">Check Answer</button><div class="answer">The loop can run a maximum of <code>n</code> times, once for each item. The work per iteration does not depend on the array size, so the worst-case time complexity is <strong>O(n)</strong>.</div>
-
-
-<p>Which of the following is <strong>not</strong> true about linear search?</p>
+<div>
+<div class="options">
+<label><input type="radio" name="q1" value="a"> O(1)</label>
+<label><input type="radio" name="q1" value="b"> O(log(n))</label>
+<label><input type="radio" name="q1" value="c"> O(n)</label>
+<label><input type="radio" name="q1" value="d"> O(n<sup>2</sup>)</label>
+</div><button onclick="mcq(this,'c','The loop can run a maximum of n times, once for each item. The number of operations in 1 run of the loop (1 iteration) does not depend on the number of elements in the collection, so the worst-case time complexity is O(n)')">Check Answer</button><div class="feedback"></div>
+</div>
+</div>
+<div class="question" data-q>
+<p><br/>Which of the following is <strong>not</strong> true about linear search?</p>
 <div class="options">
 <label><input type="radio" name="q2" value="a"> It is useful for searching through a collection that is not ordered.</label>
 <label><input type="radio" name="q2" value="b"> It compares each item in a collection, one at a time, to the item being searched for.</label>
 <label><input type="radio" name="q2" value="c"> The search loop will always run n times before the algorithm is finished.</label>
 <label><input type="radio" name="q2" value="d"> A linear search could start searching from the beginning or end of a collection.</label>
 </div><button onclick="mcq(this,'c','The search can stop early when the item is found. It only examines all n items when the item is absent or is the final item.')">Check Answer</button><div class="feedback"></div>
-
+</div>
+</div>
 </section>
 
 
@@ -153,47 +247,89 @@ summary{cursor:pointer;font-weight:bold}.hint{color:#5b6575}
 
 </div>
 
-<div class="question" data-q><h3>Practice 1</h3><p>Try to come up with a strategy that will allow you to win the 100 boxes game every time. Then share your strategy with a partner. Your partner must play using your algorithm, and you may not instruct them while they play.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Ask questions that split the remaining possible boxes as evenly as possible. Start with a midpoint such as “Is it ≤ 50?” Then continue with the midpoint of whichever half remains. Each question roughly halves the possibilities.</div></div>
+<div class="question" data-q><p>Once you have come up with a strategy that you believe can be used to win the 100 boxes game every time, explain it to a partner. Your partner must play using your algorithm; you may not instruct them while they play, only before.</p><button onclick="reveal(this)">Check Strategy</button><div class="answer">Ask questions that split the remaining possible boxes as evenly as possible. Start with a midpoint such as “Is it ≤ 50?” Then continue with the midpoint of whichever half remains. Each question roughly halves the possibilities.</div></div>
 
-<div class="question" data-q><h3>Practice 2</h3><p>Could you use a similar strategy to find a word in an English dictionary? Describe your strategy to a partner.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Yes. Because dictionary words are alphabetically ordered, open near the middle and compare that word with the target. Ignore the half where the target cannot be, then repeat with the remaining half until you find the word or have no possibilities left.</div></div>
+<div class="question" data-q><p>Could you use a similar strategy to find a word in an English dictionary? Describe your strategy to a partner.</p><button onclick="reveal(this)">Check Strategy</button><div class="answer">You can use this strategy because dictionary words are alphabetically ordered. Open the dictionary near the middle and compare one of the words on that page with the one you are searching for. This will tell you which half of the book the word is in. For example, if you were searching for 'hello' and 'lemons' was at the middle of the book, you would know 'hello' must be in the first half because it comes before 'lemons'. You can then repeat the process, finding the middle of the remaining half, and so on.</div></div>
 
-<p>When you are searching through an ordered collection of items, an algorithm faster than linear search is called <strong>binary search</strong>. If you found a functional strategy for the 100 boxes game, you may already have the main idea behind binary search.</p>
-<p>In the 100 boxes game, we can identify one box among 100 in only 7 questions. This is much better than checking every box, which could require 100 checks.</p>
+<p>Imagine you were a software developer for a major business, like McDonald's, that has over 1,000,000 employees worldwide! Searching for a name in that list of employees would be a pain! Luckily, we can use a faster algorithm, called the <strong>binary search</strong> to seach through this list, as long as it is in alphabetical order. Where a linear search would take at worst 1,000,000 iterations to find a particular McDonalds employee, the binary search would only need to do at most 20 iterations! The way it works is very similar to the winning strategy for the 100 boxes game.</p>
 
-<div class="question" data-q><h3>Practice 3 — Multiple Choice</h3><p>What strategy allowed us to consistently figure out which box contained the jackpot in only 7 steps?</p>
+<div class="question" data-q>
+<h3>Check Your Understanding 2</h3><p>What strategy allowed us to consistently figure out which box contained the jackpot in only 7 steps?</p>
+<div class="question" data-q>
 <div class="options">
 <label><input type="radio" name="q3" value="a"> We used a linear search.</label>
 <label><input type="radio" name="q3" value="b"> We eliminated 14 possibilities with each question.</label>
 <label><input type="radio" name="q3" value="c"> We asked questions that could eliminate up to 90% of the possibilities each time.</label>
 <label><input type="radio" name="q3" value="d"> We eliminated half of the possibilities with each question.</label>
-</div><button onclick="mcq(this,'d','Each question was designed to split the remaining possibilities roughly in half. Seven halvings give 2⁷ = 128 possible outcomes, enough to distinguish among 100 boxes.')">Check Answer</button><div class="feedback"></div></div>
+</div><button onclick="mcq(this,'d','Each question was designed to split the remaining possibilities roughly in half. Seven halvings give 2⁷ = 128 possible outcomes, enough to distinguish among 100 boxes.')">Check Answer</button><div class="feedback"></div>
+</div>
+
+<div class="question" data-q><p>Binary search is very useful, but only if the collection...</p>
+<div class="options">
+<label><input type="radio" name="q3" value="a"> is ordered</label>
+<label><input type="radio" name="q3" value="b"> is random</label>
+<label><input type="radio" name="q3" value="c"> is small </label>
+<label><input type="radio" name="q3" value="d"> contains no duplicate values </label>
+<button onclick="mcq(this, 'a', 'Binary search will not work unless the collection is in order')">Check Strategy</button><div class="answer"></div></div>
+
+</div>
+
+
 </section>
 
 
     
 <section class="section">
 <h2>Understanding binary search</h2>
-<div class="question" data-q><h3>Practice 4</h3><p>Suppose we wanted to search through an alphabetically ordered array of 100 Strings for the word <strong>“jump.”</strong> How could we ask a question that would tell us which half contains the word, if it exists?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word and compare it alphabetically with “jump.” If the middle word comes before “jump,” search the right half. If it comes after “jump,” search the left half.</div></div>
+<div class="question" data-q><h3>Q1</h3>
+<p>Suppose we wanted to search through an alphabetically ordered array of 100 Strings for the word <strong>“jump."</p>
 
-<div class="question" data-q><h3>Practice 5</h3><p>If the word were in the right half, how could we once more cut the remaining possible positions of “jump” in half?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word of the right half and compare it with “jump.” If that middle word comes before “jump,” search the right part of that half; if it comes after, search the left part.</div></div>
+<div class="question" data-q>
+</strong>How could we ask a question that would tell us which half contains the word jump, if it exists?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word and compare it alphabetically with “jump.” If the middle word comes before “jump,” search the right half. If it comes after “jump,” search the left half.</div></div>
 
-<div class="question" data-q><h3>Practice 6</h3><p>Suppose we had an array of 161 words in alphabetical order. Explain how you would find the middle index.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">There are 161 items. Since 161 is an odd number, there is one middle item. There are 80 items before and 80 after it. The middle is the 81st item, which is <strong>index 80</strong> because array indices start at 0.</div></div>
+<div class="question" data-q><p>If the word were in the right half, how could we once more cut the remaining possible positions of “jump” in half?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">Find the middle word of the right half and compare it with “jump.” If that middle word comes before “jump,” search the right part of that half; if it comes after, search the left part.</div></div>
+</div>
 
-<div class="question" data-q><h3>Practice 7</h3><p>What are the start and end indices of the left half, excluding the middle?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The left half is <strong>0 through 79</strong>.</div></div>
+</div>
 
-<div class="question" data-q><h3>Practice 8</h3><p>What are the start and end indices of the right half, excluding the middle?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The right half is <strong>81 through 160</strong>.</div></div>
 
-<div class="question" data-q><h3>Practice 9</h3><p>Explain how you would determine the middle index of the right half. If there are an even number of values, use the left one as the middle.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The right half contains indices 81–160, or 80 values. The two central indices are 120 and 121. Using the left-middle rule, choose <strong>120</strong>.</div></div>
 
-<div class="question" data-q><h3>Practice 10 — Coding</h3><p>Write some Java code to create a function that will find the middle.</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre><code>public static int findMid(String[] arr, int start, int end) {
-    return (start + end) / 2;
-}</code></pre><p>Integer division gives the left middle when the segment contains an even number of values.</p></div></div>
+<div class="question" data-q><h3>Q2</h3>
+<p>Suppose we had an array of 161 words in alphabetical order...</p>
+<div class="question" data-q>
+<p>Explain how you would find the middle index.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">There are 161 items. Since 161 is an odd number, there is one middle item. There are 80 items before and 80 after it. The middle is the 81st item, which is <strong>index 80</strong> because array indices start at 0.</div></div>
 
-<div class="question" data-q><h3>Practice 11 — Coding</h3><p>Create <code>findMid(String[] arr, int start, int end)</code>, taking an array and two boundary indices and returning the middle index.</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre><code>public static int findMid(String[] arr, int start, int end) {
-    return (start + end) / 2;
+<div class="question" data-q><p>What would be the start and end indices of the left half, excluding the middle?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The left half is <strong>0 through 79</strong>.</div></div>
+
+<div class="question" data-q><p>What would be the start and end indices of the right half, excluding the middle?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The right half is <strong>81 through 160</strong>.</div></div>
+
+<div class="question" data-q><p>Explain how you would determine the middle index of the right half. If there are an even number of values, use the left one as the middle.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The right half contains indices 81–160, or 80 values. The two central indices are 120 and 121. Using the 
+</div></div>
+</div>
+
+<div class="question" data-q><h3>Q3</h3><p>Create a method called findMid(int start, int end), that takes in two integers representing the start and end indices of a segment of an array. The method must return the index of the middle of that segment of the array.
+
+</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre><code>public static int findMid(int start, int end) {
+    int mid = (start + end) / 2; //calculates the average or halfway point between start and end.
+    return mid;
+    
+    //if there is an even number of indices in the range
+    //(start+end)/2 results in a decimal value
+    //but the decimal part gets truncated (cut off) 
+    //since mid is an integer type. 
+    //This truncation gives the left middle index
+    //instead of the decimal number that is halfway 
+    //between the left and right middle indices.
+    
 }</code></pre></div></div>
 
-<div class="question" data-q><h3>Practice 12 — Coding</h3><p>Suppose you have an array of Strings called <code>words</code>. Determine the start/end indices of the left and right halves, excluding the middle, and determine the middle index of each half. You may use <code>findMid</code>.</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre><code>int start = 0;
+<div class="question" data-q><h3>Q4</h3><p>Suppose you have an array of strings called words. Write some code to do the following:
+<ul>
+    <li>Determine the start and end indices of the right and left halves of the array (excluding the middle)</li>
+    <li>Determine the middle index of each half of the array</li>
+</ul>
+You may use the findMid method from the previous question.
+</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre><code>int start = 0;
 int end = words.length - 1;
 int mid = findMid(words, start, end);
 
@@ -206,29 +342,85 @@ int rightEnd = end;
 int leftMid = findMid(words, leftStart, leftEnd);
 int rightMid = findMid(words, rightStart, rightEnd);</code></pre><p>In a full binary search, check that a half is not empty before calling <code>findMid</code> on it.</p></div></div>
 
-<div class="question" data-q><h3>Practice 13</h3><p>The binary search repeats a set of steps until the value is found or there are no items left. Write the steps for one iteration. No code is required.</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><ol><li>Find the middle of the current search segment.</li><li>Compare the middle value with the target.</li><li>If the middle is less than the target, search the right half.</li><li>If the middle is greater than the target, search the left half.</li><li>If equal, return the middle index.</li><li>If no values remain, return <code>-1</code>.</li></ol></div></div>
+<div class="question" data-q><h3>Q5</h3><p>The binary search repeats a set of steps until the value being searched for is found or there are no items left to be searched through. Write out what you think might be the set of steps in one iteration (repetition) of the binary search. Hint: we have already covered most of the steps involved in previous questions. You do not need to write any code for this question.</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><ol><li>Find the middle of the segment of the collection that you wish to search through</li><li>Compare the middle value to the one you are searching for (the target)</li><li>If the middle is less than the target, treat the right half of the segment as the new segment to search through</li><li>If the middle is greater than the target, treat the left half of the segment as the new segment to search through</li><li>If the middle is equal to the value you are searching for, return the index of the middle value</li><li>If there are no values left to search through, return -1</li></ol></div></div>
 
-<div class="question" data-q><h3>Practice 14 — Coding</h3><p>Create <code>binarySearch(int[] arr, int x)</code> for an ascending array. Return the index of <code>x</code>, or <code>-1</code> if it is absent.</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre><code>public static int binarySearch(int[] arr, int x) {
+
+
+<div class="question" data-q><h3>Q6</h3><p>Create a method called binarySearch(int[ ] arr, int x) which takes in an array of integers, sorted in ascending order, and returns the index of the integer x in the array (or -1 if x is not in the array). Hint: Use the previous 3 questions to guide your thinking.</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre><code>public static int binarySearch(int[] arr, int x) {
     int start = 0;
     int end = arr.length - 1;
-
+    
+    //repeat until there are no more items to search through
     while (start &lt;= end) {
+    
+        //find the middle of the array segment
         int mid = (start + end) / 2;
 
+        //if the middle value is the one we are searching for, return its index
         if (arr[mid] == x) {
             return mid;
-        } else if (arr[mid] &lt; x) {
+        } 
+        
+        //if the middle value is less than the value we are searching for, 
+        //we will search the right half in the next iteration of the loop
+        //update the start index of the segment to be the start of the right half
+        //the end index is already the end of the right half
+        else if (arr[mid] &lt; x) {
             start = mid + 1;
-        } else {
+        } 
+        
+        //if the middle value is greater than the value we are searching for, 
+        //we will search the left half in the next iteration of the loop
+        //update the end index of the segment to be the end of the left half
+        //the start index is already the start of the left half
+        else {
             end = mid - 1;
         }
+        
     }
-
+    
+    //If the value was never found return -1
     return -1;
 }</code></pre></div></div>
 
-<div class="callout">Watch this <a href="https://www.youtube.com/watch?v=eVuPCG5eIr4" target="_blank" rel="noopener">video on the binary search algorithm</a> for more detail.</div>
+
+<div class="question" data-q><h3>Q7</h3><p>At most, how many iterations of binary search would be required to search through an ordered collection of 16 items?
+
+</p><button onclick="reveal(this)">Check Answer</button><div class="answer">It would take 4 repetitions, because we need to cut the value in half 4 times to reach 1. 16 / 2<sup>4</sup> = 1
+</div></div>
+
+<div class="question" data-q><h3>Q8</h3><p>At most, how many iterations of binary search would be required to search through an ordered collection of 32 items?
+
+</p><button onclick="reveal(this)">Check Answer</button><div class="answer">It would take 5 iterations. Notice that if we half 32 we get 16, so it only takes 1 more iteration to search through 32 items vs 16 items.</div></div>
+
+<div class="question" data-q><h3>Q9</h3><p>Binary search becomes more useful in comparison to linear search the larger the collection becomes. Why do you think this is?
+
+</p><button onclick="reveal(this)">Check Answer</button><div class="answer">In general, a collection of 2n items will only require 1 more iteration to search than a collection of n items. If n is small, doubling its size does not add a lot more items, but if n is large, doubling adds a lot of extra items. Eg. if a collection of 1,000,000 items takes 20 iterations to search, a collection of 2,000,000 takes only 21! This is an extra 1,000,000 items that can be searched with only 1 extra iteration.</div></div>
+
+<div class="question" data-q><h3>Q10</h3><p>Determine a mathematical formula for the number of iterations of binary search (x) required to search a collection of n items.
+
+</p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre>The equation below can be read as: 
+    "if we divide n items by 2 repeatedly, x times, we are left with 1 item"
+    n / 2<sup>x</sup> = 1   
+    we can multiply both sides by 2<sup>x</sup> to get
+    n = 2<sup>x</sup>
+    and take log<sub>2</sub> of both sides to get
+    log<sub>2</sub>(n) = x
+    You can read log<sub>2</sub>(n) as: "the exponent of 2 that gives n", 
+    so we can read the overall equation as: 
+    "the exponent of 2 that gives n is equal to the number of repetitions 
+    of binary search required to search n values"
+</pre>
+
+</div></div>
+
+<div class="question" data-q><h3>Q11</h3><p>What do you think the Big O notation for the time complexity of the binary search would be?
+
+</p><button onclick="reveal(this)">Check Answer</button><div class="answer"> <p>Since the binary search algorithm takes log<sub>2</sub>(n) iterations in the worst case, and the number of operations in 1 iteration of the loop is O(1) (constant), the algorithm has a worst case time complexity of O(log(n)). This is much faster than O(n) for large values of n.</p>
+</div></div>
+<div class="callout">Watch this <a href="https://www.youtube.com/watch?v=eVuPCG5eIr4" target="_blank" rel="noopener">video</a> for a summary of the contents covered in this lesson.</div>
 </section>
+
 
 <section class="section">
 <h2>Extension Challenge</h2>
@@ -260,24 +452,66 @@ int binarySearch(ArrayList&lt;T&gt; list, T target) {
 
 <script>
 let checked=0;
+const reel = document.getElementById("reel");
+let reelPos=0;
+let nameInd = 0;
+const FPS = 40;
+const FRAME_TIME = 1000 / FPS;
 const qs=[...document.querySelectorAll('[data-q]')];
 document.getElementById('progressTotal').textContent=qs.length;
+
 function progress(){document.getElementById('progressCount').textContent=checked;document.getElementById('progressBar').style.width=(checked/qs.length*100)+'%'}
+
 function mark(q){if(!q.dataset.checked){q.dataset.checked='1';checked++;progress()}}
+
 function reveal(btn){const q=btn.closest('[data-q]');q.querySelector('.answer').classList.add('show');q.classList.add('correct');btn.disabled=true;mark(q)}
-function mcq(btn,correct,why){const q=btn.closest('[data-q]'),sel=q.querySelector('input:checked'),f=q.querySelector('.feedback');if(!sel){f.className='feedback show bad';f.textContent='Please select an answer first.';return}const label=q.querySelector('input[value="'+correct+'"]').parentElement;if(sel.value===correct){f.className='feedback show good';f.innerHTML='<strong>Correct!</strong> You selected the right answer.';q.classList.add('correct')}else{f.className='feedback show bad';f.innerHTML='<strong>Not quite.</strong> The correct answer is: <strong>'+label.textContent.trim()+'</strong><br>'+why;q.classList.add('incorrect')}btn.disabled=true;mark(q)}
 
-function spin() {
-    const reel = document.getElementById("reel");
+function mcq(btn,correct,why){const q=btn.closest('[data-q]'),sel=q.querySelector('input:checked'),f=q.querySelector('.feedback');if(!sel){f.className='feedback show bad';f.textContent='Please select an answer first.';return}const label=q.querySelector('input[value="'+correct+'"]').parentElement;if(sel.value===correct){f.className='feedback show good';f.innerHTML='<strong>Correct! </strong>'+why;q.classList.add('correct')}else{f.className='feedback show bad';f.innerHTML='<strong>Not quite.</strong> The correct answer is: <strong>'+label.textContent.trim()+'</strong><br>'+why;q.classList.add('incorrect')}btn.disabled=true;mark(q)}
 
-    // Move left by 50px
-    reel.style.transform = "translateX(-50px)";
-
-    // Optional: reset after animation
-    setTimeout(() => {
-        reel.style.transform = "translateX(0px)";
-    }, 300);
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+async function shiftLeft(){
+    console.log("in the shift left function");
+    if (nameInd > 0){
+        nameInd = 0;
+        reelPos = 0;
+        reel.style.transform = "translateX(0px)";
+    }
+}
+
+async function shiftRight(){
+    console.log("in the shift right function");
+    if (nameInd <6){
+        nameInd = nameInd + 1;
+        let width = reel.getBoundingClientRect().width/7;
+        let loopChange = width/6;
+        let counter = 0;
+        while(counter<6){
+            reelPos = reelPos - loopChange;
+            reel.style.transform = "translateX("+Math.trunc(reelPos)+"px)";
+            await sleep(FRAME_TIME);
+            counter+=1;
+        }
+    }
+    
+}
+
+document.getElementById('speak').addEventListener('click', () => {
+    const text = window.getSelection().toString().trim();
+
+    if (!text) {
+        alert("Highlight some text first.");
+        return;
+    }
+
+    const utter = new SpeechSynthesisUtterance(text);
+    let speed = document.getElementById("speedSlider").value;
+    utter.rate = speed;
+    speechSynthesis.speak(utter);
+});
+
     
 function newGame(){
   
@@ -359,10 +593,11 @@ function newGame(){
 
   document.getElementById("enterBtn").onclick = () =>{
     if (remaining === 1) {
-      alert("No questions left — you must guess the jackpot number! Click on the box that you believe ontains the jackpot.");
+      alert("That was your final question! Now you must guess the jackpot number! Click on the box that you believe contains the jackpot.");
+    }else if (remaining === 0) {
+      alert("You have no questions left — you must guess the jackpot number! Click on the box that you believe contains the jackpot.");
       return;
     }
-    
     
     const op = document.getElementById("opBox").value.trim();
     const val = parseInt(document.getElementById("valBox").value);
