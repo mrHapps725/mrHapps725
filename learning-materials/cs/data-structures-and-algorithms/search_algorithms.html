@@ -297,13 +297,14 @@ Since the list is in alphabetical order, you could start at the beginning and st
 <div class="question" data-q><h3>Q2</h3>
 <p>Suppose we had an array of 161 words in alphabetical order...</p>
 <div class="question" data-q>
-<p>Explain how you would find the middle index.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">There are 161 items. Since 161 is an odd number, there is one middle item. There are 80 items before and 80 after it. The middle is the 81st item, which is <strong>index 80</strong> because array indices start at 0.</div></div>
+<p>Explain how you would find the middle index.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">161 is an odd number, so there is one number in the middle as opposed to two. There are 160 items in the list excluding the middle number, so there are 160/2 = 80 items before the middle and another 80 items after the middle. The middle index would be the 81st item, which would be at index 80, since array indices start at 0.
+</div></div>
 
 <div class="question" data-q><p>What would be the start and end indices of the left half, excluding the middle?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The left half is <strong>0 through 79</strong>.</div></div>
 
 <div class="question" data-q><p>What would be the start and end indices of the right half, excluding the middle?</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The right half is <strong>81 through 160</strong>.</div></div>
 
-<div class="question" data-q><p>Explain how you would determine the middle index of the right half. If there are an even number of values, use the left one as the middle.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The right half contains indices 81–160, or 80 values. The two central indices are 120 and 121. Using the 
+<div class="question" data-q><p>Explain how you would determine the middle index of the right half. If there are an even number of values, use the left one as the middle.</p><button onclick="reveal(this)">Check Answer</button><div class="answer">The right half covers indices 81 to 160, which is 80 items total. Half of 80 is 40, so the left‑middle element is the 40th item in this half. Since the first index in this range is 81, you move forward 39 more positions (because the 1st item is already at 81): 81+39=120, so the left‑middle index is <strong>120</strong>. A quick way to find this is to find the average of the start and end index and round down to the nearest integer: &lfloor;(81+160)/2&rfloor; = 120.
 </div></div>
 </div>
 
@@ -393,11 +394,11 @@ int rightMid = findMid(words, rightStart, rightEnd);</code></pre><p>In a full bi
 
 </p><button onclick="reveal(this)">Check Answer</button><div class="answer">It would take 5 iterations. Notice that if we half 32 we get 16, so it only takes 1 more iteration to search through 32 items vs 16 items.</div></div>
 
-<div class="question" data-q><h3>Q9</h3><p>Binary search becomes more useful in comparison to linear search the larger the collection becomes. Why do you think this is?
+<div class="question" data-q><h3>Q9</h3><p>Binary search becomes more useful, in comparison to linear search, the larger the collection becomes. Why do you think this is?
 
 </p><button onclick="reveal(this)">Check Answer</button><div class="answer">In general, a collection of 2n items will only require 1 more iteration to search than a collection of n items. If n is small, doubling its size does not add a lot more items, but if n is large, doubling adds a lot of extra items. Eg. if a collection of 1,000,000 items takes 20 iterations to search, a collection of 2,000,000 takes only 21! This is an extra 1,000,000 items that can be searched with only 1 extra iteration.</div></div>
 
-<div class="question" data-q><h3>Q10</h3><p>Determine a mathematical formula for the number of iterations of binary search (x) required to search a collection of n items.
+<div class="question" data-q><h3>Q10</h3><p>Determine a mathematical formula for the number of iterations (x) required to search a collection of n items, using the binary search algorithm.
 
 </p><button onclick="reveal(this)">Check Answer</button><div class="answer"><pre>The equation below can be read as: 
     "if we divide n items by 2 repeatedly, x times, we are left with 1 item"
@@ -414,7 +415,7 @@ int rightMid = findMid(words, rightStart, rightEnd);</code></pre><p>In a full bi
 
 </div></div>
 
-<div class="question" data-q><h3>Q11</h3><p>What do you think the Big O notation for the time complexity of the binary search would be?
+<div class="question" data-q><h3>Q11</h3><p>What do you think the Big O notation for the time complexity of the binary search algorithm is?
 
 </p><button onclick="reveal(this)">Check Answer</button><div class="answer"> <p>Since the binary search algorithm takes log<sub>2</sub>(n) iterations in the worst case, and the number of operations in 1 iteration of the loop is O(1) (constant), the algorithm has a worst case time complexity of O(log(n)). This is much faster than O(n) for large values of n.</p>
 </div></div>
